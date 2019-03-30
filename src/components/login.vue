@@ -1,19 +1,21 @@
 <template>
   <div class="login">
-      <!-- 居中的盒子 -->
+    <!-- 居中的盒子 -->
     <div class="box">
-        <!-- 标题 -->
+      <!-- 标题 -->
       <h2>用户登录</h2>
       <!-- 饿了么ul表单组件 -->
-      <el-form label-position="top" label-width="80px">
-        <el-form-item label="用户名">
-          <el-input></el-input>
+      <el-form label-position="top" label-width="80px" :model="loginForm" :rules="rules" ref="loginForm">
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="loginForm.username"></el-input>
         </el-form-item>
-        <el-form-item label="密码">
-          <el-input></el-input>
+        <el-form-item label="密码" prop="passworld">
+          <el-input v-model="loginForm.passworld"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button class="my-btn" type="primary">立即创建</el-button>
+          <el-button  type="primary" @click="submit('loginForm')">立即创建</el-button>
+         
+          <el-button  type="success"  @click="resetForm('loginForm')">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -21,7 +23,47 @@
 </template>
 
 <script>
-export default {};
+export default {
+    data(){
+        return{
+            //表单数据
+            loginForm:{
+                username:'',
+                passworld:'',
+            },
+            //表单验证 规则
+            rules:{
+                // required:必须   message:提示信息  trigger:触发 触发方式  min:最小  max:最大
+                username:[
+                     { required: true, message:'请输入用户名', trigger: 'blur' },
+                     { min: 4, max: 12, message:'长度在 3 到 12个字符', trigger:'blur' }
+                ],
+                passworld:[
+                     { required: true, message:'请输入密码', trigger: 'blur' },
+                     { min: 6, max: 12, message:'长度在 6到 12个字符', trigger:'blur' }
+                ],
+            }
+        }
+    },
+    methods: {
+        //表单提交
+        submit(formName){
+            this.$refs[formName].validate(valid=>{
+                if(valid){
+                    //成功
+                }else{
+                    //失败
+                    this.$message.error('数据格式错误');
+                    return false;
+                }
+            });
+        },
+      //重置表单
+       resetForm(formName) {
+       this.$refs[formName].resetFields();
+       }
+    },
+};
 </script>
 
 <style lang='scss'>
@@ -38,8 +80,8 @@ export default {};
     box-sizing: border-box;
     background-color: white;
     padding: 35px;
-    .my-btn{
-        width: 100%;
+    .my-btn {
+      width: 100%;
     }
   }
 }
