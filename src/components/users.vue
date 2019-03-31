@@ -25,7 +25,7 @@
       <el-table-column prop="mg_state" label="用户状态">
         <!-- scope 是一个名字 -->
         <template slot-scope="scope">
-          <el-switch v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+          <el-switch @change="stateChange(scope.row)" v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </template>
       </el-table-column>
       <el-table-column label="操作">
@@ -80,14 +80,19 @@ export default {
     //搜索用户
     async search() {
       let res = await this.$axios.get("users", {
-        headers: {
-          Authorization: window.sessionStorage.getItem("token")
-        },
+        // headers: {
+        //   Authorization: window.sessionStorage.getItem("token")
+        // },
         params: this.sendData
       });
       // console.log(res);
       this.total = res.data.data.total;
       this.userList = res.data.data.users;
+    },
+    //状态改变
+    stateChange(row){
+      //调用接口
+      this.$axios.put(`users/${row.id}/state/${row.me_state}`)
     }
   },
   //接口调用
