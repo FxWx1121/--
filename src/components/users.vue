@@ -9,7 +9,7 @@
     <el-row>
       <el-col :span="6">
         <el-input placeholder="请输入内容" v-model="sendData.query" class="input-with-select">
-          <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
         </el-input>
       </el-col>
       <el-col :span="12">
@@ -76,19 +76,23 @@ export default {
     handleEdit(index, row) {
       console.log(index);
       console.log(row);
+    },
+    //搜索用户
+    async search() {
+      let res = await this.$axios.get("users", {
+        headers: {
+          Authorization: window.sessionStorage.getItem("token")
+        },
+        params: this.sendData
+      });
+      // console.log(res);
+      this.total = res.data.data.total;
+      this.userList = res.data.data.users;
     }
   },
   //接口调用
-  async created() {
-    let res = await this.$axios.get("users", {
-      headers: {
-        Authorization: window.sessionStorage.getItem("token")
-      },
-      params: this.sendData
-    });
-    // console.log(res);
-    this.total=res.data.data.total;
-    this.userList=res.data.data.users;
+  created() {
+    this.search()
   }
 };
 </script>
