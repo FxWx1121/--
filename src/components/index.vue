@@ -51,6 +51,17 @@ export default {
       this.$router.push("/login")
     }
   },
+  //不需要获取组件的数据,只是缓存数据 跟组建无关
+  beforeCreate() {
+    if(window.sessionStorage.getItem("token")){
+    }else{
+      // 进行登录判断
+      this.$message.error('请先登录');
+      //没有token返回登录页面
+      this.$router.push('/login');
+      
+    }
+  },
 };
 </script>
 
