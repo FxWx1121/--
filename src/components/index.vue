@@ -41,7 +41,17 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name:"index",
+  methods: {
+    logout(){
+      //删除缓存
+      window.sessionStorage.removeItem("token");
+      //编程式导航 去登陆页
+      this.$router.push("/login")
+    }
+  },
+};
 </script>
 
 <style lang='scss'>
