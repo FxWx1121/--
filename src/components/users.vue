@@ -12,7 +12,7 @@
         </el-input>
       </el-col>
       <el-col :span="12">
-        <el-button type="success" plain>成功按钮</el-button>
+        <el-button type="success" plain>搜索</el-button>
       </el-col>
     </el-row>
     <!-- 表格 -->

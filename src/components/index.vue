@@ -11,7 +11,7 @@
           <h2>后台管理系统</h2>
         </el-col>
         <el-col :span="2">
-          <el-button type="success">退出</el-button>
+          <el-button type="success" @click="logout">退出</el-button>
         </el-col>
       </el-row>
     </el-header>
