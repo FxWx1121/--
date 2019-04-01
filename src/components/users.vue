@@ -56,11 +56,19 @@
             icon="el-icon-delete"
             plain
           ></el-button>
-          <el-button type="warning" size="mini" icon="el-icon-check" plain></el-button>
+          <el-button
+            @click="shouRole(scope.row)"
+            type="warning"
+            size="mini"
+            icon="el-icon-check"
+            plain
+          ></el-button>
         </template>
       </el-table-column>
     </el-table>
     <!-- 分页 -->
+    <!-- @current-change="currentChange"
+      @size-change="sizeChange" -->
     <el-pagination
       :page-sizes="[5, 10, 15, 20]"
       :page-size="sendData.pagesize"
@@ -106,6 +114,26 @@
         <el-button type="primary" @click="submitAdd('editForm')">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 编辑角色 -->
+    <el-dialog title="修改用户" :visible.sync="roleFormVisible">
+      <el-form ref="editForm">
+        <el-form-item label="用户名" label-width="100px" prop="username"></el-form-item>
+        <el-form-item label="邮箱" label-width="100px">
+          <el-select v-model="value" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="roleFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitRole('editForm')">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -128,6 +156,8 @@ export default {
       addFormVisible: false,
       //是否显示编辑对话框
       editFormFormVisible: false,
+      //编辑角色
+      roleFormVisible: false,
       //新增表单提交
       addForm: {
         username: "张三",
@@ -224,10 +254,10 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       })
-        .then(async() => {
+        .then(async () => {
           //axios
-          let res=await this.$axios.delete(`users/${row.id}`);
-          if(res.data.meta.status===200){
+          let res = await this.$axios.delete(`users/${row.id}`);
+          if (res.data.meta.status === 200) {
             this.search();
           }
         })
@@ -237,7 +267,21 @@ export default {
             message: "已取消删除"
           });
         });
-    }
+    },
+    //编辑角色
+    shouRole(row) {
+      this.roleFormVisible = true;
+    },
+    // //页码改变
+    // currentChange(current){
+    //   this.sendData.pagenum=current;
+    //   this.search();
+    // },
+    // //页码容量改变
+    // sizeChange(size){
+    //   this.sendData.pagenum=size;
+    //   this.search();
+    // }
   },
   //接口调用
   created() {

@@ -18,23 +18,22 @@
     <el-container class="my-container">
       <!-- 左边内容 -->
       <el-aside width="200px" class="my-aside">
-        <el-menu
-          default-active="2"
-          class="el-menu-vertical-demo"
-          router
-        >
-          <el-submenu index="1">
+        <el-menu default-active="2" class="el-menu-vertical-demo" router>
+          <el-submenu :index="item.id" v-for="item in menuList">
             <template slot="title">
               <i class="el-icon-location"></i>
-              <span>导航一</span>
+              <span>{{item.authName}}</span>
             </template>
-              <el-menu-item index="users"> <span class="el-icon-menu"></span> 选项2</el-menu-item>
+            <el-menu-item :index="it.path" v-for="it in item.children">
+              <span class="el-icon-menu"></span>
+              {{it.authName}}
+            </el-menu-item>
           </el-submenu>
         </el-menu>
       </el-aside>
       <!-- 主题区域 -->
       <el-main class="my-main">
-          <router-view></router-view>
+        <router-view></router-view>
       </el-main>
     </el-container>
   </el-container>
@@ -42,26 +41,37 @@
 
 <script>
 export default {
-  name:"index",
+  name: "index",
+  data() {
+    return {
+      //菜单列表
+      menuList: []
+    };
+  },
   methods: {
-    logout(){
+    logout() {
       //删除缓存
       window.sessionStorage.removeItem("token");
       //编程式导航 去登陆页
-      this.$router.push("/login")
+      this.$router.push("/login");
     }
   },
   //不需要获取组件的数据,只是缓存数据 跟组建无关
   beforeCreate() {
-    if(window.sessionStorage.getItem("token")){
-    }else{
+    if (window.sessionStorage.getItem("token")) {
+    } else {
       // 进行登录判断
-      this.$message.error('请先登录');
+      this.$message.error("请先登录");
       //没有token返回登录页面
-      this.$router.push('/login');
-      
+      this.$router.push("/login");
     }
   },
+  //钩子函数
+  async created() {
+    let res = await this.$axios.get("menus");
+    console.log(res);
+    this.menuList = res.data.data;
+  }
 };
 </script>
 
