@@ -1,10 +1,6 @@
 import Vue from "vue";
 import App from "./App.vue";
 
-//导入全局的面包屑
-import myBread from "./components/myBread.vue"
-Vue.component('my-bread',myBread)
-
 //导入axios
 import axios from "axios";
 //设置全局样式
@@ -17,6 +13,10 @@ import "./assets/base.scss";
 //导入饿了么ul
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
+
+//导入全局的面包屑
+import myBread from "./components/myBread.vue"
+Vue.component('my-bread',myBread)
 
 // axio拦截器
 // 请求拦截器
