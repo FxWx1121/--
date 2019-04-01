@@ -68,7 +68,7 @@
     </el-table>
     <!-- 分页 -->
     <!-- @current-change="currentChange"
-      @size-change="sizeChange" -->
+    @size-change="sizeChange"-->
     <el-pagination
       :page-sizes="[5, 10, 15, 20]"
       :page-size="sendData.pagesize"
@@ -111,20 +111,20 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="editFormFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitAdd('editForm')">确 定</el-button>
+        <el-button type="primary" @click="submitEdit('editForm')">确 定</el-button>
       </div>
     </el-dialog>
-    <!-- 编辑角色 -->
-    <el-dialog title="修改用户" :visible.sync="roleFormVisible">
+    <!-- 角色设置 -->
+    <el-dialog title="用户角色" :visible.sync="roleFormVisible">
       <el-form ref="editForm">
-        <el-form-item label="用户名" label-width="100px" prop="username"></el-form-item>
-        <el-form-item label="邮箱" label-width="100px">
-          <el-select v-model="value" placeholder="请选择">
+        <el-form-item label="当前用户" label-width="100px">{{editUser.username}}</el-form-item>
+        <el-form-item label="选择角色" label-width="100px">
+          <el-select v-model="editUser.role_name" placeholder="请选择">
             <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              v-for="item in roleList"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.id"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -158,6 +158,10 @@ export default {
       editFormFormVisible: false,
       //编辑角色
       roleFormVisible: false,
+      //当前正在编辑信息
+      editUser: {},
+      //用户角色列表
+      roleList: [],
       //新增表单提交
       addForm: {
         username: "张三",
@@ -234,7 +238,7 @@ export default {
       });
     },
     //保存修改
-    async submitAdd(formName) {
+    async submitEdit(formName) {
       //发请求
       let res = await this.$axios.put(`users/${this.editForm.id}`, {
         email: this.editForm.email,
@@ -269,8 +273,25 @@ export default {
         });
     },
     //编辑角色
-    shouRole(row) {
+    async shouRole(row) {
       this.roleFormVisible = true;
+      //保存编辑用户信息
+      this.editUser = row;
+      //获取所有角色列表
+      let res = await this.$axios.get("roles");
+      this.roleList = res.data.data;
+    },
+     // 分配角色
+    async submitRole(formName) {
+      // 获取用户id
+      // 获取角色id
+      let res = await this.$axios.put(`users/${this.editUser.id}/role`, {
+        rid: this.editUser.role_name
+      });
+      if (res.data.meta.status === 200) {
+        this.search();
+      }
+      this.roleFormVisible = false;
     },
     // //页码改变
     // currentChange(current){

@@ -19,7 +19,7 @@
       <!-- 左边内容 -->
       <el-aside width="200px" class="my-aside">
         <el-menu default-active="2" class="el-menu-vertical-demo" router>
-          <el-submenu :index="item.id" v-for="item in menuList">
+          <el-submenu :index="item.id+''" v-for="item in menuList">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span>{{item.authName}}</span>
