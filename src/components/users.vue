@@ -66,15 +66,16 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- 分页 -->
-    <!-- @current-change="currentChange"
-    @size-change="sizeChange"-->
+    <!-- 分页器 -->
     <el-pagination
-      :page-sizes="[5, 10, 15, 20]"
+      :page-sizes="[5, 10, 15, 18]"
       :page-size="sendData.pagesize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
+      @current-change="currentChange"
+      @size-change="sizeChange"
     ></el-pagination>
+
     <!-- 新增对话框 -->
     <el-dialog title="添加用户" :visible.sync="addFormVisible">
       <el-form :model="addForm" :rules="addRules" ref="addForm">
@@ -281,7 +282,7 @@ export default {
       let res = await this.$axios.get("roles");
       this.roleList = res.data.data;
     },
-     // 分配角色
+    // 分配角色
     async submitRole(formName) {
       // 获取用户id
       // 获取角色id
@@ -293,16 +294,18 @@ export default {
       }
       this.roleFormVisible = false;
     },
-    // //页码改变
-    // currentChange(current){
-    //   this.sendData.pagenum=current;
-    //   this.search();
-    // },
-    // //页码容量改变
-    // sizeChange(size){
-    //   this.sendData.pagenum=size;
-    //   this.search();
-    // }
+    // 页码改变
+    currentChange(current) {
+      // console.log(current);
+      this.sendData.pagenum = current;
+      this.search();
+    },
+    // 页容量改变
+    sizeChange(size) {
+      // console.log(size);
+      this.sendData.pagesize = size;
+      this.search();
+    }
   },
   //接口调用
   created() {
