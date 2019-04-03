@@ -84,6 +84,15 @@ router.beforeEach((to,from,next)=>{
   // console.log(from)
   // next()
   // if(to.path==='/login'){
+
+  //如果没有匹配
+  if(to.matched.length===0){
+    // 提示
+    Vue.prototype.$message.error('傻逼,地址错了')
+    //没有匹配
+    next('/error')
+  }
+   
   if(to.meta.nologin===true){  
     // 直接去
     next()

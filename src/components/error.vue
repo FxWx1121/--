@@ -4,7 +4,12 @@
 
 <script>
 export default {
-  name:'error'
+  name:'error',
+  created() {
+      setTimeout(()=>{
+          this.$router.push('./login');
+      },3000);
+  },
 }
 </script>
 
