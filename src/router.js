@@ -66,6 +66,29 @@ let router = new VueRouter({
   routes
 });
 
+
+//注册全局前置守卫(导航守卫)
+router.beforeEach((to,from,next)=>{
+  // console.log(to)
+  // console.log(from)
+  // next()
+  if(to.path==='/login'){
+    // 直接去
+    next()
+  }else{
+    // 不是登录页 判断是否有token
+    if(window.sessionStorage.getItem('token')){
+      // 存在 过去
+      next()
+    }else{
+      // 弹框
+      Vue.prototype.$message.error('你没有登录！')
+      // 不存在 打会登录页
+      next('/login')
+    }
+  }
+
+})
 //暴露
 export default router;
 
