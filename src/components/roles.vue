@@ -53,14 +53,13 @@ export default {
            rolesList:[{},{}]
        }
    },
-  
   methods: {
     //编辑点击事件
     async handleEdit(index, row) {
       // console.log(index);
       // console.log(row);
       let res = await this.$axios.get(`users/${row.id}`);
-      // console.log(res);
+      console.log(res);
       this.editForm = res.data.data;
       if (res.data.meta.status === 200) {
         //弹框
