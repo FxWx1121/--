@@ -18,7 +18,12 @@ import reports from "./components/reports.vue";
 let routes = [
   {
     path: "/login",
-    component: login
+    component: login,
+    //路由元信息
+    meta:{
+      //不需要登录吗
+      nologin :true
+    }
   },
   {
     path: "/",
@@ -72,7 +77,8 @@ router.beforeEach((to,from,next)=>{
   // console.log(to)
   // console.log(from)
   // next()
-  if(to.path==='/login'){
+  // if(to.path==='/login'){
+  if(to.meta.nologin===true){  
     // 直接去
     next()
   }else{

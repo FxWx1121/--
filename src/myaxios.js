@@ -1,5 +1,7 @@
 //导入axios
 import axios from "axios";
+//导入router
+import router from "./router";
 export default {
   install(Vue) {
     //设置基地址
@@ -21,6 +23,21 @@ export default {
     // 响应拦截器
     axios.interceptors.response.use(
       function(response) {
+        //非法token判断
+        if (
+          response.data.meta.msg === "无效token" &&
+          response.data.meta.status === 400
+        ) {
+          //打回登录
+          Vue.prototype.$message.warning("伪造token");
+          //删除伪造
+          window.sessionStorage.removeItem("token");
+          //去登陆页
+          router.push("/login");
+          //用return方式阻止
+          return;
+        }
+
         //统一设置弹框
         //成功状态码
         if ([200, 201, 204].indexOf(response.data.meta.status) != -1) {
